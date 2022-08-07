@@ -46,7 +46,7 @@ export async function createTodo( createTodoRequest: CreateTodoRequest, userId: 
 // Delete Todo function
 export function deleteTodo( todoId: string, userId: string ): Promise<string> {
   logger.info(`Deleting TODO item: ${todoId} for User: ${userId}`)
-  return todosAcess.deleteTodo(todoId)
+  return todosAcess.deleteTodo(todoId, userId)
 }
 
 
@@ -55,7 +55,7 @@ export function updateTodo( todoId:string, updatedTodo:UpdateTodoRequest, userId
 
   logger.info(`Updating TODO item ${todoId} for userId: ${userId}`)
 
-  return todosAcess.updateTodo(todoId, updatedTodo as TodoUpdate)
+  return todosAcess.updateTodo(todoId, updatedTodo as TodoUpdate, userId)
 }
 
 // Get Presigned Url for s3 bucket
@@ -70,5 +70,5 @@ export async function generateUploadUrl(attachmentId:string): Promise<string> {
 export async function updateAttachmentUrl(userId:string, todoId:string, attachmentId: string): Promise<any> {
   logger.info(`Updating attachment Url for User: ${userId} with Todo ID: ${todoId}`);
   const attachmentUrl = await fileStore.getAttachmentUrl(attachmentId);
-  return await todosAcess.updateAttachmentUrl(todoId, attachmentUrl)
+  return await todosAcess.updateAttachmentUrl(todoId, attachmentUrl, userId)
 }

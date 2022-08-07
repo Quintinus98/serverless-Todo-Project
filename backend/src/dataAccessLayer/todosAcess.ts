@@ -73,11 +73,14 @@ export class TodosAccess {
 
 
     // Update a Todo Item
-    async updateTodo(todoId:string, todoUpdate:TodoUpdate): Promise<string> {
+    async updateTodo(todoId:string, todoUpdate:TodoUpdate, userId:string): Promise<string> {
         logger.info(`Updating Todo item with ID: ${todoId}`)
         let params = {
             TableName: this.todoTable,
-            Key: { "todoId": todoId },
+            Key: { 
+              todoId: todoId,
+              userId: userId
+            },
             UpdateExpression: 'set #a = :a, #b = :b, #c = :c',
             ExpressionAttributeNames: {
                 "#a": "name",
@@ -101,14 +104,15 @@ export class TodosAccess {
     }
     
     // Update attachment Url
-    async updateAttachmentUrl( todoId:string, attachmentUrl:string ): Promise<string> {
+    async updateAttachmentUrl( todoId:string, attachmentUrl:string, userId:string ): Promise<string> {
         logger.info(`Updating Attachment Url with ID: ${todoId}`)
         let params = {
             TableName: this.todoTable,
             Key: {
-              "todoId": todoId
+              todoId: todoId,
+              userId: userId
             },
-            UpdateExpression: 'set #attachmentUrl = :attachmentUrl',
+            UpdateExpression: 'set attachmentUrl = :attachmentUrl',
             ExpressionAttributeValues: {
                 ':attachmentUrl': attachmentUrl
             }
@@ -123,13 +127,14 @@ export class TodosAccess {
     }
 
     // Delete Todo Item
-    async deleteTodo(todoId:string): Promise<string> {
+    async deleteTodo(todoId:string, userId:string): Promise<string> {
         logger.info (`Deleting Todo Item: ${todoId}`)
         let params = {
             TableName : this.todoTable,
             Key: {
-                "todoId": todoId
-            }
+              todoId: todoId,
+              userId: userId
+            },
         };
           
         await this.docClient.delete(params, function(err: any, data: any) {
