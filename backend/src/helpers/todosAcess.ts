@@ -95,10 +95,12 @@ export class TodosAccess {
         logger.info(`Updating Attachment Url with ID: ${todoId}`)
         let params = {
             TableName: this.todoTable,
-            Key: { todoId : todoId },
-            UpdateExpression: 'SET #attachmentUrl = :attachmentUrl',
+            Key: {
+              todoId: todoId
+            },
+            UpdateExpression: 'set attachmentUrl = :attachmentUrl',
             ExpressionAttributeValues: {
-                ':attachmentUrl' : attachmentUrl
+                ':attachmentUrl': attachmentUrl
             }
         };
         

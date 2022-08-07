@@ -21,7 +21,7 @@ export const handler: APIGatewayProxyHandler =
     await updateAttachmentUrl(userId, todoId, attachmentId)
     
     return {
-      statusCode: 201,
+      statusCode: 202,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
