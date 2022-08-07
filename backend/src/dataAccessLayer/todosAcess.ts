@@ -1,17 +1,27 @@
 import 'source-map-support/register'
 
+import * as AWS from 'aws-sdk'
+import * as AWSXRay from 'aws-xray-sdk'
+
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
-import { TodoUpdate } from '../models/TodoUpdate';
+import { TodoUpdate } from '../models/TodoUpdate'
 
+
+// const AWS = AWSXRay.captureAWS(uninstrumentedAWS)
 const logger = createLogger('todosAcess')
 
 // TODO: Implement the dataLayer logic
 
+const ddbClient = AWSXRay.captureAWSClient(new AWS.DynamoDB({}));
+
+
 export class TodosAccess {
   constructor(
-    private readonly docClient: DocumentClient = new DocumentClient(),
+    private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient({
+      service: ddbClient
+    }),
     private readonly todoTable = process.env.TODOS_TABLE,
     private readonly todosCreatedAtIndex = process.env.TODOS_CREATED_AT_INDEX
 ) {}
@@ -96,9 +106,9 @@ export class TodosAccess {
         let params = {
             TableName: this.todoTable,
             Key: {
-              todoId: todoId
+              "todoId": todoId
             },
-            UpdateExpression: 'set attachmentUrl = :attachmentUrl',
+            UpdateExpression: 'set #attachmentUrl = :attachmentUrl',
             ExpressionAttributeValues: {
                 ':attachmentUrl': attachmentUrl
             }
@@ -131,3 +141,15 @@ export class TodosAccess {
     }
 }
 
+
+// function createDynamoDBClient() {
+//   if (process.env.IS_OFFLINE){
+//     console.log('Creating a local DynamoDB instance')
+//     return new XAWS.DynamoDB.DocumentClient({
+//       region: 'localhost',
+//       endpoint: 'http://localhost:8000'
+//     })
+//   }
+
+//   return new XAWS.DynamoDB.DocumentClient()
+// }

@@ -4,7 +4,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } f
 // import * as middy from 'middy'
 // import { cors } from 'middy/middlewares'
 
-import { getTodos } from '../../helpers/todos'
+import { getTodos } from '../../businessLogic/todos'
 import { getUserId } from '../utils';
 import { createLogger } from '../../utils/logger'
 

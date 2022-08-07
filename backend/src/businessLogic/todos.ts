@@ -1,6 +1,6 @@
 import 'source-map-support/register'
-import { TodosAccess } from './todosAcess'
-import { fileStorage } from './attachmentUtils';
+import { TodosAccess } from '../dataAccessLayer/todosAcess'
+import { fileStorage } from '../fileStorageLayer/attachmentUtils';
 import { TodoItem } from '../models/TodoItem';
 import { TodoUpdate } from '../models/TodoUpdate'
 
